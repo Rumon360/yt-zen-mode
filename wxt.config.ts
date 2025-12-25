@@ -10,6 +10,7 @@ export default defineConfig({
     description:
       "Zen Mode - Youtube is a browser extension helps you to watch videos in Zen mode. 😌",
     version: "0.1.0",
+    permissions: ["tabs", "storage"],
   },
   vite: () => ({
     plugins: [tailwindcss()],
@@ -19,4 +20,13 @@ export default defineConfig({
       },
     },
   }),
+  hooks: {
+    "build:manifestGenerated": (wxt, manifest) => {
+      manifest.content_scripts = manifest.content_scripts || [];
+      manifest.content_scripts?.push({
+        css: ["assets/reset.css"],
+        matches: ["*://*.youtube.com/*"],
+      });
+    },
+  },
 });
